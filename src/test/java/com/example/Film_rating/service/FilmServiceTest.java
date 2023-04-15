@@ -1,5 +1,6 @@
 package com.example.Film_rating.service;
 
+import com.example.Film_rating.dto.FilmDTO;
 import com.example.Film_rating.entity.Film;
 import com.example.Film_rating.repository.FilmRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.BDDMockito.given;
-
+import static org.mockito.ArgumentMatchers.any;
 
 class FilmServiceTest {
 
@@ -26,9 +28,7 @@ class FilmServiceTest {
     private FilmService service = new FilmServiceImpl(filmRepository);
 
     @BeforeEach
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void init() { MockitoAnnotations.openMocks(this); }
 
     @Test
     void getAllFilmsTest() {
@@ -44,10 +44,11 @@ class FilmServiceTest {
 
     @Test
     void saveFilm() {
-        Film film = new Film("testTitle", "testDirector", 0.0f, 0.0f);
+        FilmDTO filmDTO = new FilmDTO("testTitle", "testDirector", 0.0f, 0.0f);
+        Film film = new Film(filmDTO.getTitle(), filmDTO.getDirector(), filmDTO.getBudget(), filmDTO.getRating());
 
-        given(filmRepository.save(film)).willReturn(film);
-        Film film1 = service.saveFilm(film);
+        given(filmRepository.save(any(Film.class))).willReturn(film);
+        Film film1 = service.saveFilm(filmDTO);
 
         assertEquals(film1.getTitle(), "testTitle");
         assertEquals(film1.getDirector(), "testDirector");
@@ -60,9 +61,7 @@ class FilmServiceTest {
         Film film = new Film("testTitle", "testDirector", 0.0f, 0.0f);
         film.setId(1);
 
-        Optional<Film> optionalFilm = Optional.ofNullable(film);
-
-        given(filmRepository.findById(1)).willReturn(optionalFilm);
+        given(filmRepository.findById(1)).willReturn(Optional.of(film));
         Film film1 = service.getFilmById(1);
 
         assertEquals(film1.getId(), film.getId());
@@ -74,16 +73,17 @@ class FilmServiceTest {
 
     @Test
     void updateFilm() {
-        Film film = new Film("testTitle", "testDirector", 0.0f, 0.0f);
+        FilmDTO filmDTO = new FilmDTO("testTitle", "testDirector", 0.0f, 0.0f);
+        Film film = new Film(filmDTO.getTitle(), filmDTO.getDirector(), filmDTO.getBudget(), filmDTO.getRating());
         float rating = 10.0f;
 
-        given(filmRepository.save(film)).willAnswer(f -> {
+        given(filmRepository.save(any(Film.class))).willAnswer(f -> {
             Film film1 = f.getArgument(0);
             film1.setId(1);
             film1.setRating(rating);
             return film1;
         });
-        Film film1 = service.saveFilm(film);
+        Film film1 = service.saveFilm(filmDTO);
 
         assertNotEquals(film1.getId(), 0);
         assertEquals(film1.getTitle(), "testTitle");

@@ -28,7 +28,7 @@ class FilmRepositoryTest {
     public void saveFilm() {
         Film addFilm = new Film("testTitle", "testDirector", 0.0f, 0.0f);
         Film filmFromDB = filmRepository.save(addFilm);
-
+        System.out.println(filmFromDB);
         assertTrue(filmFromDB.getId() > 0);
     }
 
