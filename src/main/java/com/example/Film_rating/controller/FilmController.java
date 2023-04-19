@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class FilmController {
@@ -56,8 +57,13 @@ public class FilmController {
 
     @GetMapping("/edit/{id}")
     public String editFilm(@PathVariable Integer id, Model model) {
+        Film film = null;
+        try {
+            film = filmService.getFilmById(id);
+        } catch (NoSuchElementException e) {
+            return "errors/404";
+        }
 
-        Film film = filmService.getFilmById(id);
         FilmDTO filmDTO = new FilmDTO();
 
         filmDTO.setTitle(film.getTitle());
@@ -79,7 +85,12 @@ public class FilmController {
             return "edit-film";
         }
 
-        Film film = filmService.getFilmById(id);
+        Film film = null;
+        try {
+            film = filmService.getFilmById(id);
+        } catch (NoSuchElementException e) {
+            return "errors/404";
+        }
 
         if(!film.getTitle().equals(filmDTO.getTitle())) {
             if (filmService.checkTitle(filmDTO)){

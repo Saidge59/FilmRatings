@@ -32,7 +32,7 @@ public class SecurityConfiguration {
             .csrf().disable()
             .authorizeHttpRequests(
                     (requests) -> requests
-                    .requestMatchers("/", "/films/**", "/registration").permitAll()
+                    .requestMatchers("/", "/films/**", "/registration", "/api/films/**").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/admin-page").hasAuthority("ADMIN")
 //                        .requestMatchers(HttpMethod.POST,"/admin-page").hasAuthority("ADMIN")
                     .anyRequest().authenticated())
