@@ -1,4 +1,4 @@
-package com.example.Film_rating.controller;
+package com.example.Film_rating.controller.error;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,10 +17,7 @@ public class ErrorsController implements ErrorController {
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
 
-            if(statusCode == HttpStatus.BAD_REQUEST.value()) {
-                return "errors/403";
-            }
-            else if(statusCode == HttpStatus.NOT_FOUND.value()) {
+            if(statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "errors/404";
             }
             else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
@@ -28,5 +25,10 @@ public class ErrorsController implements ErrorController {
             }
         }
         return "error";
+    }
+
+    @RequestMapping("/access-denied")
+    public String getAccessDenied() {
+        return "errors/403";
     }
 }
