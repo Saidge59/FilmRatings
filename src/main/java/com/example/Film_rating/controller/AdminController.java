@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,29 +34,29 @@ public class AdminController {
         return new UserRegistrationDTO();
     }
 
-    @GetMapping("/admin-page")
+    @GetMapping("/admin")
     public String pageAdmin(Model model) {
 
         UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
 
         model.addAttribute("user", userRegistrationDTO);
-        return "admin-page";
+        return "admin";
     }
 
-    @PostMapping("/admin-page")
+    @PostMapping(value = "/admin", params = "save")
     public String main(@ModelAttribute("user") UserRegistrationDTO registrationDTO,
                        RedirectAttributes redirectAttributes) {
 
-        if (!userService.checkNameUser(registrationDTO)) {
-            redirectAttributes.addFlashAttribute("errorUsername", "");
-            return "redirect:/admin-page";
+        User userByName = userService.findUserByName(registrationDTO.getName());
+
+        if (userByName == null) {
+            redirectAttributes.addFlashAttribute("errorUsername", registrationDTO.getName());
+            return "redirect:/admin";
         } else {
-            redirectAttributes.addFlashAttribute("success", "");
+            redirectAttributes.addFlashAttribute("successUsername", registrationDTO.getName());
         }
 
-        User user_db = userService.findUserByName(registrationDTO.getName());
-
-        List<Role> listRole = user_db.getRoles();
+        List<Role> listRole = userByName.getRoles();
 
         Role role = roleService.findUserByName(Roles.USER);
         if(registrationDTO.isRoleUser() && !listRole.contains(role)) {
@@ -71,12 +72,27 @@ public class AdminController {
             listRole.remove(roleService.findUserByName(Roles.ADMIN));
         }
 
-        user_db.setRoles(listRole);
-        System.out.println("user_db: " + user_db);
+        userByName.setRoles(listRole);
 
-        userService.save(user_db);
+        userService.save(userByName);
 
-        return "redirect:/admin-page";
+        return "redirect:/admin";
+    }
+
+    @PostMapping(value = "/admin", params = "delete")
+    public String remove(@ModelAttribute("user") UserRegistrationDTO registrationDTO,
+                       RedirectAttributes redirectAttributes) {
+
+        User userByName = userService.findUserByName(registrationDTO.getName());
+
+        if(userByName == null) {
+            redirectAttributes.addFlashAttribute("errorUsername", registrationDTO.getName());
+            return "redirect:/admin";
+        } else
+            redirectAttributes.addFlashAttribute("deleteUsername", registrationDTO.getName());
+
+        userService.delete(userByName);
+        return "redirect:/admin";
     }
 
 }

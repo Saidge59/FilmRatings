@@ -44,10 +44,10 @@ public class UserSecurityController {
             return "registration";
         }
 
-        if (userService.checkNameUser(registrationDTO)) {
+        if (userService.findUserByName(registrationDTO.getName()) != null) {
             redirectAttributes.addFlashAttribute("errorUsername", registrationDTO.getName());
             return "redirect:/registration";
-        } else if (userService.checkEmailUser(registrationDTO)) {
+        } else if (userService.findByEmail(registrationDTO.getEmail()) != null) {
             redirectAttributes.addFlashAttribute("errorEmail", registrationDTO.getEmail());
             return "redirect:/registration";
         }

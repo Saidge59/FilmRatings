@@ -73,7 +73,7 @@ public class FilmController {
 
         model.addAttribute("film", filmDTO);
         model.addAttribute("id", film.getId());
-        return "edit-film";
+        return "edit";
     }
 
     @PostMapping("/edit/{id}")
@@ -82,7 +82,7 @@ public class FilmController {
                              RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            return "edit-film";
+            return "edit";
         }
 
         Film film = null;

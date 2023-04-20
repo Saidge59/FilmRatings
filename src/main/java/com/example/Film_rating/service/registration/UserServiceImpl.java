@@ -35,6 +35,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByEmail(String name) { return userRepository.findByEmail(name);}
+
+    @Override
     public User save(UserRegistrationDTO registrationDTO) {
 
         Role role = roleRepository.findByName(Roles.USER.name());
@@ -57,14 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkNameUser(UserRegistrationDTO registrationDTO) {
-        User user = userRepository.findByName(registrationDTO.getName());
-        return user != null;
-    }
-
-    @Override
-    public boolean checkEmailUser(UserRegistrationDTO registrationDTO) {
-        User user = userRepository.findByEmail(registrationDTO.getEmail());
-        return user != null;
+    public void delete(User user) {
+        userRepository.delete(user);
     }
 }

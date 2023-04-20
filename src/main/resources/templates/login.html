@@ -18,7 +18,7 @@
                 <a class="nav-link" aria-current="page" th:href="@{/films}">Films</a>
                 <a class="nav-link" th:href="@{/add}">Add Film</a>
                 <span sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" th:href="@{/admin-page}">Admin</a>
+                    <a class="nav-link" th:href="@{/admin}">Admin</a>
                 </span>
             </div>
         </div>
@@ -66,12 +66,5 @@
     </div>
 </div>
 
-<br>
-<br>
-<footer class="footer">
-    <div class="p-3 text-white bg-dark text-end">
-        <span>Website - 2023</span>
-    </div>
-</footer>
 </body>
 </html>

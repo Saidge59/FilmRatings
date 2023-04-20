@@ -18,7 +18,7 @@
                 <a class="nav-link" th:href="@{/films}">Films</a>
                 <a class="nav-link" th:href="@{/add}">Add Film</a>
                 <span sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link active" th:href="@{/admin-page}">Admin</a>
+                    <a class="nav-link active" th:href="@{/admin}">Admin</a>
                 </span>
             </div>
         </div>
@@ -38,10 +38,15 @@
             <h2 class="text-center">Select roles for a user</h2>
             <div class="card-body">
 
-                <div th:if="${errorUsername}" class="alert alert-danger">Username not found</div>
-                <div th:if="${success}" class="alert alert-success">Roles were change</div>
+                <div th:if="${errorUsername}" class="alert alert-danger">
+                    Username '<span th:text="${errorUsername}"/>' not found</div>
+                <div th:if="${successUsername}" class="alert alert-success">
+                    Roles for '<span th:text="${successUsername}"/>' were change</div>
+                <div th:if="${deleteUsername}" class="alert alert-success">
+                    User '<span th:text="${deleteUsername}"/>' deleted
+                </div>
 
-                <form th:action="@{/admin-page}" th:object="${user}" method="POST">
+                <form th:action="@{/admin}" th:object="${user}" method="POST">
                     <div class="form-group">
                         <label class="control-label" for="name">Username</label>
                         <input id="name" class="form-control" th:field="*{name}" placeholder="Enter your username"/>
@@ -61,7 +66,8 @@
                     </div>
                     <br>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="submit" name="save" class="btn btn-success">Save</button>
+                        <button type="submit" name="delete" class="btn btn-danger">Delete</button>
                     </div>
                 </form>
             </div>
@@ -69,14 +75,6 @@
     </div>
     <br>
 </div>
-
-<br>
-<br>
-<footer class="footer">
-    <div class="p-3 text-white bg-dark text-end">
-        <span>Website - 2023</span>
-    </div>
-</footer>
 
 </body>
 </html>

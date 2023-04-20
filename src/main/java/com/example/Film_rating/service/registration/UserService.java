@@ -6,8 +6,8 @@ import com.example.Film_rating.entity.registration.User;
 public interface UserService {
     public User save(UserRegistrationDTO registrationDTO);
     public User save(User user);
+    public void delete(User user);
 
     public User findUserByName(String name);
-    public boolean checkNameUser(UserRegistrationDTO registrationDTO);
-    public boolean checkEmailUser(UserRegistrationDTO registrationDTO);
+    public User findByEmail(String name);
 }
