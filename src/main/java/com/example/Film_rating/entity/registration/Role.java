@@ -3,6 +3,8 @@ package com.example.Film_rating.entity.registration;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor

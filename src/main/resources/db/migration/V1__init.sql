@@ -1,4 +1,13 @@
-INSERT INTO FILMS_RATING (TITLE, DIRECTOR, BUDGET, RATING)
+CREATE TABLE films_rating (
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    director VARCHAR(255) NOT NULL,
+    budget FLOAT NOT NULL,
+    rating FLOAT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO films_rating (title, director, budget, rating)
 VALUES
     ('Avatar: The Way of Water', 'James Cameron', 460.0, 7.8),
     ('Puss in Boots: The Last Wish', 'Joel Crawford, Januel Mercado', 90.0, 7.8),

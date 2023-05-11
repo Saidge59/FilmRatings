@@ -33,7 +33,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private UserServiceImpl userService = new UserServiceImpl(userRepository, roleRepository);
+    private UserServiceImpl userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder);
 
     @BeforeEach
     void init() {
@@ -51,7 +51,6 @@ class UserServiceTest {
 
         System.out.println(passwordEncoder.encode(registrationDTO.getPassword()));
         User user1 = userService.save(registrationDTO);
-
 
         assertEquals(user1.getName(), "nameTest");
         assertEquals(user1.getEmail(), "emailTest");

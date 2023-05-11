@@ -1,6 +1,5 @@
 package com.example.Film_rating.exception_handler;
 
-import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,4 +16,12 @@ public class FilmGlobalExceptionHandler {
         data.setMessage(exception.getMessage());
         return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }
+
+//    @ExceptionHandler
+//    public ResponseEntity<FilmIncorrectData> handleException2 (Exception exception) {
+//        FilmIncorrectData data = new FilmIncorrectData();
+//        data.setMessage(exception.getMessage());
+//        return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
+//    }
+
 }
