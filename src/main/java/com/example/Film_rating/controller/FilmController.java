@@ -5,6 +5,7 @@ import com.example.Film_rating.entity.Film;
 import com.example.Film_rating.service.FilmService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,7 +45,7 @@ public class FilmController {
             return "add-film";
         }
 
-        if(filmService.checkTitle(filmDTO)) {
+        if (filmService.checkTitle(filmDTO)) {
             redirectAttributes.addFlashAttribute("errorTitle", filmDTO.getTitle());
             return "redirect:/add";
         }
@@ -92,8 +93,8 @@ public class FilmController {
             return "errors/404";
         }
 
-        if(!film.getTitle().equals(filmDTO.getTitle())) {
-            if (filmService.checkTitle(filmDTO)){
+        if (!film.getTitle().equals(filmDTO.getTitle())) {
+            if (filmService.checkTitle(filmDTO)) {
                 redirectAttributes.addFlashAttribute("errorTitle", filmDTO.getTitle());
                 return "redirect:/edit/{id}";
             }
@@ -112,7 +113,7 @@ public class FilmController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteFilm(@PathVariable int id){
+    public String deleteFilm(@PathVariable int id) {
         filmService.deleteFilm(id);
         return "redirect:/films";
     }
@@ -124,7 +125,13 @@ public class FilmController {
                                 Model model) {
         int pageSize = MAX_NUM_PAGES;
 
-        Page<Film> page = filmService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        Page<Film> page;
+        try {
+            page = filmService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        } catch (PropertyReferenceException e) {
+            return "errors/500";
+        }
+
         List<Film> filmLists = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
@@ -133,7 +140,7 @@ public class FilmController {
 
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reversSortDir", sortDir.equals("asc") ? "desc" : "asc" );
+        model.addAttribute("reversSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("films", filmLists);
         return "films";
